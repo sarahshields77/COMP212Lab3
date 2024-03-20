@@ -1,15 +1,9 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using _301264350_shields_Lab3.Models;
 
 namespace _301264350_shields_Lab3
@@ -17,69 +11,86 @@ namespace _301264350_shields_Lab3
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         // ObservableCollection to hold menu items so changes automatically shown in UI
-        private ObservableCollection<BillItem> billItems = new ObservableCollection<BillItem>();
+        private ObservableCollection<BillItem> _selectedBillItems = new ObservableCollection<BillItem>();
 
         // ObservableCollection to hold selected bill items
-        private ObservableCollection<BillItem> selectedBillItems = new ObservableCollection<BillItem>();
+        public ObservableCollection<BillItem> SelectedBillItems
+        {
+            get { return _selectedBillItems; }
+            set
+            {
+                _selectedBillItems = value;
+                OnPropertyChanged(nameof(SelectedBillItems));  // raise event when collection changes
+            }
+        }
 
         public MainWindow()
         {
             InitializeComponent();
             this.DataContext = this;
-            InitializeMenu();
+            InitializeMenu();  
+            
         }
 
-        private void InitializeMenu()
+        public void InitializeMenu()
         {
+            SelectedBillItems = new ObservableCollection<BillItem>();
             // add all of the menu items to the ObservableCollection
-            billItems.Add(new BillItem() { Name = "Soda", Category = "Beverage", Price = 1.95m });
-            billItems.Add(new BillItem() { Name = "Tea", Category = "Beverage", Price = 1.50m });
-            billItems.Add(new BillItem() { Name = "Coffee", Category = "Beverage", Price = 1.25m });
-            billItems.Add(new BillItem() { Name = "Mineral Water", Category = "Beverage", Price = 2.95m });
-            billItems.Add(new BillItem() { Name = "Juice", Category = "Beverage", Price = 2.50m });
-            billItems.Add(new BillItem() { Name = "Buffalo Wings", Category = "Appetizer", Price = 5.95m });
-            billItems.Add(new BillItem() { Name = "Buffalo Fingers", Category = "Appetizer", Price = 6.95m });
-            billItems.Add(new BillItem() { Name = "Potato Skins", Category = "Appetizer", Price = 8.95m });
-            billItems.Add(new BillItem() { Name = "Nachos", Category = "Appetizer", Price = 8.95m });
-            billItems.Add(new BillItem() { Name = "Mushroom Caps", Category = "Appetizer", Price = 10.95m });
-            billItems.Add(new BillItem() { Name = "Shrimp Cocktail", Category = "Appetizer", Price = 12.95m });
-            billItems.Add(new BillItem() { Name = "Chips and Salsa", Category = "Appetizer", Price = 6.95m });
-            billItems.Add(new BillItem() { Name = "Seafood Alfredo", Category = "Main Course", Price = 15.95m });
-            billItems.Add(new BillItem() { Name = "Chicken Alfredo", Category = "Main Course", Price = 13.95m });
-            billItems.Add(new BillItem() { Name = "Chicken Picatta", Category = "Main Course", Price = 13.95m });
-            billItems.Add(new BillItem() { Name = "Turkey Club", Category = "Main Course", Price = 11.95m });
-            billItems.Add(new BillItem() { Name = "Lobster Pie", Category = "Main Course", Price = 19.95m });
-            billItems.Add(new BillItem() { Name = "Prime Rib", Category = "Main Course", Price = 20.95m });
-            billItems.Add(new BillItem() { Name = "Shrimp Scampi", Category = "Main Course", Price = 18.95m });
-            billItems.Add(new BillItem() { Name = "Turkey Dinner", Category = "Main Course", Price = 13.95m });
-            billItems.Add(new BillItem() { Name = "Stuffed Chicken", Category = "Main Course", Price = 14.95m });
-            billItems.Add(new BillItem() { Name = "Apple Pie", Category = "Dessert", Price = 5.95m });
-            billItems.Add(new BillItem() { Name = "Sundae", Category = "Dessert", Price = 3.95m });
-            billItems.Add(new BillItem() { Name = "Carrot Cake", Category = "Dessert", Price = 5.95m });
-            billItems.Add(new BillItem() { Name = "Mud Pie", Category = "Dessert", Price = 4.95m });
-            billItems.Add(new BillItem() { Name = "Apple Crisp", Category = "Dessert", Price = 5.95m });
+            SelectedBillItems.Add(new BillItem() { Name = "Soda", Category = "Beverage", Price = 1.95m });
+            SelectedBillItems.Add(new BillItem() { Name = "Tea", Category = "Beverage", Price = 1.50m });
+            SelectedBillItems.Add(new BillItem() { Name = "Coffee", Category = "Beverage", Price = 1.25m });
+            SelectedBillItems.Add(new BillItem() { Name = "Mineral Water", Category = "Beverage", Price = 2.95m });
+            SelectedBillItems.Add(new BillItem() { Name = "Juice", Category = "Beverage", Price = 2.50m });
+            SelectedBillItems.Add(new BillItem() { Name = "Buffalo Wings", Category = "Appetizer", Price = 5.95m });
+            SelectedBillItems.Add(new BillItem() { Name = "Buffalo Fingers", Category = "Appetizer", Price = 6.95m });
+            SelectedBillItems.Add(new BillItem() { Name = "Potato Skins", Category = "Appetizer", Price = 8.95m });
+            SelectedBillItems.Add(new BillItem() { Name = "Nachos", Category = "Appetizer", Price = 8.95m });
+            SelectedBillItems.Add(new BillItem() { Name = "Mushroom Caps", Category = "Appetizer", Price = 10.95m });
+            SelectedBillItems.Add(new BillItem() { Name = "Shrimp Cocktail", Category = "Appetizer", Price = 12.95m });
+            SelectedBillItems.Add(new BillItem() { Name = "Chips and Salsa", Category = "Appetizer", Price = 6.95m });
+            SelectedBillItems.Add(new BillItem() { Name = "Seafood Alfredo", Category = "Main Course", Price = 15.95m });
+            SelectedBillItems.Add(new BillItem() { Name = "Chicken Alfredo", Category = "Main Course", Price = 13.95m });
+            SelectedBillItems.Add(new BillItem() { Name = "Chicken Picatta", Category = "Main Course", Price = 13.95m });
+            SelectedBillItems.Add(new BillItem() { Name = "Turkey Club", Category = "Main Course", Price = 11.95m });
+            SelectedBillItems.Add(new BillItem() { Name = "Lobster Pie", Category = "Main Course", Price = 19.95m });
+            SelectedBillItems.Add(new BillItem() { Name = "Prime Rib", Category = "Main Course", Price = 20.95m });
+            SelectedBillItems.Add(new BillItem() { Name = "Shrimp Scampi", Category = "Main Course", Price = 18.95m });
+            SelectedBillItems.Add(new BillItem() { Name = "Turkey Dinner", Category = "Main Course", Price = 13.95m });
+            SelectedBillItems.Add(new BillItem() { Name = "Stuffed Chicken", Category = "Main Course", Price = 14.95m });
+            SelectedBillItems.Add(new BillItem() { Name = "Apple Pie", Category = "Dessert", Price = 5.95m });
+            SelectedBillItems.Add(new BillItem() { Name = "Sundae", Category = "Dessert", Price = 3.95m });
+            SelectedBillItems.Add(new BillItem() { Name = "Carrot Cake", Category = "Dessert", Price = 5.95m });
+            SelectedBillItems.Add(new BillItem() { Name = "Mud Pie", Category = "Dessert", Price = 4.95m });
+            SelectedBillItems.Add(new BillItem() { Name = "Apple Crisp", Category = "Dessert", Price = 5.95m });
 
             // bind the ComboBoxes
-            comboBoxBeverage.ItemsSource = billItems.Where(item => item.Category == "Beverage");
+            comboBoxBeverage.ItemsSource = SelectedBillItems.Where(item => item.Category == "Beverage");
             comboBoxBeverage.DisplayMemberPath = "Name";
 
-            comboBoxAppetizer.ItemsSource = billItems.Where(item => item.Category == "Appetizer");
+            comboBoxAppetizer.ItemsSource = SelectedBillItems.Where(item => item.Category == "Appetizer");
             comboBoxAppetizer.DisplayMemberPath = "Name";
 
-            comboBoxMainCourse.ItemsSource = billItems.Where(item => item.Category == "Main Course");
+            comboBoxMainCourse.ItemsSource = SelectedBillItems.Where(item => item.Category == "Main Course");
             comboBoxMainCourse.DisplayMemberPath = "Name";
 
-            comboBoxDessert.ItemsSource = billItems.Where(item => item.Category == "Dessert");
+            comboBoxDessert.ItemsSource = SelectedBillItems.Where(item => item.Category == "Dessert");
             comboBoxDessert.DisplayMemberPath = "Name";
         }
 
         private void UpdateBillSummary()
         {
             decimal subtotal = 0;
-            foreach (BillItem item in selectedBillItems)
+            foreach (BillItem item in SelectedBillItems)
             {
                 subtotal += item.Price * item.Quantity;
             }
@@ -100,9 +111,21 @@ namespace _301264350_shields_Lab3
             BillItem selectedItem = (BillItem)comboBoxBeverage.SelectedItem;
             if (selectedItem != null)
             {
-                selectedItem.Quantity = 1;
+                // Check if the item already exists in SelectedBillItems
+                BillItem existingItem = SelectedBillItems.FirstOrDefault(item => item.Name == selectedItem.Name);
+                if (existingItem != null)
+                {
+                    // If the item exists, increase its quantity
+                    existingItem.Quantity++;
+                }
+                else
+                {
+                    // Otherwise, add the item to SelectedBillItems
+                    selectedItem.Quantity = 1;
+                    SelectedBillItems.Add(selectedItem);
+                }
 
-                selectedBillItems.Add(selectedItem);
+                OnPropertyChanged(nameof(SelectedBillItems));
                 UpdateBillSummary();
             }
         }
@@ -112,9 +135,21 @@ namespace _301264350_shields_Lab3
             BillItem selectedItem = (BillItem)comboBoxMainCourse.SelectedItem;
             if (selectedItem != null)
             {
-                selectedItem.Quantity = 1;
+                // Check if the item already exists in SelectedBillItems
+                BillItem existingItem = SelectedBillItems.FirstOrDefault(item => item.Name == selectedItem.Name);
+                if (existingItem != null)
+                {
+                    // If the item exists, increase its quantity
+                    existingItem.Quantity++;
+                }
+                else
+                {
+                    // Otherwise, add the item to SelectedBillItems
+                    selectedItem.Quantity = 1;
+                    SelectedBillItems.Add(selectedItem);
+                }
 
-                selectedBillItems.Add(selectedItem);
+                OnPropertyChanged(nameof(SelectedBillItems));
                 UpdateBillSummary();
             }
         }
@@ -124,9 +159,21 @@ namespace _301264350_shields_Lab3
             BillItem selectedItem = (BillItem)comboBoxDessert.SelectedItem;
             if (selectedItem != null)
             {
-                selectedItem.Quantity = 1;
+                // Check if the item already exists in SelectedBillItems
+                BillItem existingItem = SelectedBillItems.FirstOrDefault(item => item.Name == selectedItem.Name);
+                if (existingItem != null)
+                {
+                    // If the item exists, increase its quantity
+                    existingItem.Quantity++;
+                }
+                else
+                {
+                    // Otherwise, add the item to SelectedBillItems
+                    selectedItem.Quantity = 1;
+                    SelectedBillItems.Add(selectedItem);
+                }
 
-                selectedBillItems.Add(selectedItem);
+                OnPropertyChanged(nameof(SelectedBillItems));
                 UpdateBillSummary();
             }
         }
@@ -136,9 +183,21 @@ namespace _301264350_shields_Lab3
             BillItem selectedItem = (BillItem)comboBoxAppetizer.SelectedItem;
             if (selectedItem != null)
             {
-                selectedItem.Quantity = 1;
+                // Check if the item already exists in SelectedBillItems
+                BillItem existingItem = SelectedBillItems.FirstOrDefault(item => item.Name == selectedItem.Name);
+                if (existingItem != null)
+                {
+                    // If the item exists, increase its quantity
+                    existingItem.Quantity++;
+                }
+                else
+                {
+                    // Otherwise, add the item to SelectedBillItems
+                    selectedItem.Quantity = 1;
+                    SelectedBillItems.Add(selectedItem);
+                }
 
-                selectedBillItems.Add(selectedItem);
+                OnPropertyChanged(nameof(SelectedBillItems));
                 UpdateBillSummary();
             }
         }
@@ -146,7 +205,7 @@ namespace _301264350_shields_Lab3
         private void ClearBill_Click(object sender, RoutedEventArgs e)
         {
             // clear selectedBillItems
-            selectedBillItems.Clear();
+            SelectedBillItems.Clear();
 
             // update UI elements
             textBlockSubtotal.Text = "$0.00";
@@ -158,7 +217,7 @@ namespace _301264350_shields_Lab3
         {
             try
             {
-                Process.Start("https://www.centennialcollege.ca/");
+                Process.Start(@"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe", "https://www.centennialcollege.ca/");
             }
             catch (Exception ex)
             {
@@ -166,6 +225,5 @@ namespace _301264350_shields_Lab3
                 MessageBox.Show("Error launching the website: " + ex.Message);
             }
         }
-
     }
 }

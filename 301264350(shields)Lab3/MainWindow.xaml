@@ -37,7 +37,7 @@
         <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="10"/>
 
         <!-- DataGrid for Table's Bill -->
-        <DataGrid x:Name="dataGridBill" Grid.Row="1" Margin="10,73,144,10" ItemsSource="{Binding selectedBillItems}"  AutoGenerateColumns="False">
+        <DataGrid x:Name="dataGridBill" Grid.Row="1" Margin="10,73,144,10" ItemsSource="{Binding SelectedBillItems}"  AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Item" Binding="{Binding Name}" Width="*"/>
                 <DataGridTextColumn Header="Price" Binding="{Binding Price, StringFormat=C2}" Width="*"/>
@@ -69,7 +69,7 @@
             <StatusBarItem>
                 <StackPanel Orientation="Horizontal"/>
             </StatusBarItem>
-            <Image x:Name="companyLogo" Source="Images/centennial_logo.png" Width="162" Height="49" MouseDown="CompanyLogo_MouseDown" HorizontalAlignment="Right"/>
+            <Image x:Name="companyLogo" Source="Images/centennial_logo.png" Width="162" Height="29" MouseDown="CompanyLogo_MouseDown" HorizontalAlignment="Right"/>
             <TextBlock Text="Sarah Shields | Centennial College" VerticalAlignment="Center" Width="183" HorizontalAlignment="Right"/>
         </StatusBar>
     </Grid>

@@ -19,5 +19,10 @@ namespace _301264350_shields_Lab3.Models
         public decimal Price { get; set; }
         public int Quantity { get; set; }
 
+        public override string ToString()
+        {
+            return Name; // can customize to include other BillItem properties 
+        }
+
     }
 }
